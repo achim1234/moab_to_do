@@ -10,9 +10,23 @@ import UIKit
 
 class DetailedToDoView: UIViewController {
     
+    @IBOutlet weak var showToDoOutlet: UILabel!
+    @IBOutlet weak var showBeschreibungOutlet: UILabel!
+    @IBOutlet weak var showDatumOutlet: UILabel!
+    
+    
+    var todo_item: ToDo? //name der Swift-Datei ToDo.swift
+    
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        showToDoOutlet.text = "\(todo_item!.toDo)";
+        showBeschreibungOutlet.text = "\(todo_item!.beschreibung)";
+        showDatumOutlet.text = "\(todo_item!.datum)";
         
      
     }

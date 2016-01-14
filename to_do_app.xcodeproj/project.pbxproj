@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0015DED1C47BA9A00C46497 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0015DEC1C47BA9A00C46497 /* ToDo.swift */; };
 		D05B310B1C45367F00602D2C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05B310A1C45367F00602D2C /* AppDelegate.swift */; };
 		D05B310E1C45367F00602D2C /* to_do_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D05B310C1C45367F00602D2C /* to_do_app.xcdatamodeld */; };
 		D05B31101C45367F00602D2C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05B310F1C45367F00602D2C /* ViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D0015DEC1C47BA9A00C46497 /* ToDo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		D05B31051C45367F00602D2C /* to_do_app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = to_do_app.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05B31091C45367F00602D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D05B310A1C45367F00602D2C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				D05B31081C45367F00602D2C /* Supporting Files */,
 				D05B312D1C453CF700602D2C /* AddToDoController.swift */,
 				D05B312F1C453D1D00602D2C /* DetailedToDoView.swift */,
+				D0015DEC1C47BA9A00C46497 /* ToDo.swift */,
 			);
 			path = to_do_app;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 				D05B31101C45367F00602D2C /* ViewController.swift in Sources */,
 				D05B31301C453D1D00602D2C /* DetailedToDoView.swift in Sources */,
 				D05B312E1C453CF700602D2C /* AddToDoController.swift in Sources */,
+				D0015DED1C47BA9A00C46497 /* ToDo.swift in Sources */,
 				D05B310B1C45367F00602D2C /* AppDelegate.swift in Sources */,
 				D05B310E1C45367F00602D2C /* to_do_app.xcdatamodeld in Sources */,
 			);
@@ -423,6 +427,7 @@
 				D05B31291C45367F00602D2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D05B312A1C45367F00602D2C /* Build configuration list for PBXNativeTarget "to_do_appTests" */ = {
 			isa = XCConfigurationList;
@@ -431,6 +436,7 @@
 				D05B312C1C45367F00602D2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

@@ -15,15 +15,7 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var beschreibungOutlet: UITextField!
     @IBOutlet weak var datumOutlet: UITextField!
     
-    var toDoTextField="";
-    var beschreibungTextField="";
-    var datumTextField=String.init();
-    
-    
-    
-    
-    
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,44 +37,35 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
     
     @IBAction func clickedSaveButton(sender: UIButton) {
        
-        if toDoTextField == "" {
-        
-        
-        
-        
-        } else {
-            //Zugriff auf Core Data
-            let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-            
-            //ManagedObjectContext verwaltet sämtliche Datenobjekte
-            let context: NSManagedObjectContext = appDel.managedObjectContext!
-            
-            //Ein neues ToDo anlegen für die Entity "toDo" in CoreData
-            let newToDo = NSEntityDescription.insertNewObjectForEntityForName("toDo", inManagedObjectContext: context)
-            newToDo.setValue(toDoTextField, forKey: "toDoName")
-            newToDo.setValue(beschreibungTextField, forKey: "toDoDescription")
-            newToDo.setValue(datumTextField, forKey: "toDoDate")
-            
-            //das toDo der Entity hinzufügen
-            context.save()
-            
-            // Nach Klicken des Save Buttons wird ein Segue ausgeführt zurück zur TableView.
-            // Manueller Segue.
-            performSegueWithIdentifier("SaveButton", sender: self)
-            
-            
-        
-        
-        
-        
+        if toDoOutlet.text == "" {
+            print("kein to do eingetragen")
+            let alertController = UIAlertController(title: "ERROR", message: "Titel fehlt!", preferredStyle: .Alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+            self.presentViewController(alertController, animated: true, completion: nil)
         
         
         }
-        
-        
-        
-        
-        
+        else {
+            
+            var appDel:AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+            var context:NSManagedObjectContext! = appDel.managedObjectContext
+            
+            
+            var todo_item = NSEntityDescription.insertNewObjectForEntityForName("ToDos", inManagedObjectContext: context) as! NSManagedObject;
+            
+            
+            todo_item.setValue("" + "\(toDoOutlet.text)", forKey: "toDo");
+            todo_item.setValue("" + "\(beschreibungOutlet.text)", forKey: "beschreibung");
+            todo_item.setValue("" + "\(datumOutlet.text)", forKey: "datum");
+            
+            
+            context.save(nil)
+            
+            toDoOutlet.text = ""
+            beschreibungOutlet.text = ""
+            datumOutlet.text = ""
+           
+        }
     }
     
     
@@ -92,13 +75,13 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         switch textField {
         case toDoOutlet:
-            toDoTextField = toDoOutlet.text!
+        //    toDoTextField = toDoOutlet.text!
             beschreibungOutlet.becomeFirstResponder()
         case beschreibungOutlet:
-            beschreibungTextField = beschreibungOutlet.text!
+       //     beschreibungTextField = beschreibungOutlet.text!
             datumOutlet.becomeFirstResponder()
         case datumOutlet:
-            datumTextField = datumOutlet.text!
+       //     datumTextField = datumOutlet.text!
             datumOutlet.resignFirstResponder()
         default:
             print("Wrong case in func textFieldShouldReturn AddToDoViewController.")
@@ -110,10 +93,11 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
     // Funktion handelt die Datenübertragung via Segue.
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "savedToDoSegue" {
-            let destinationController = segue.destinationViewController as! ViewController
+            /*let destinationController = segue.destinationViewController as! ViewController
             destinationController.toDoName = toDoTextField
             destinationController.toDoDescription = beschreibungTextField
-            destinationController.toDoEstimatedTime = datumTextField
+            destinationController.toDoEstimatedTime = datumTextField*/
+            
         } else if segue.identifier == "SaveButton" {
             print("Segue.identifier: \(segue.identifier).")
         }
