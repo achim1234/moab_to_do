@@ -51,9 +51,26 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
         
         
         } else {
-        
-            let appDel: AppDelegate = UIApplication.sharedApplication().
-        
+            //Zugriff auf Core Data
+            let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            
+            //ManagedObjectContext verwaltet sämtliche Datenobjekte
+            let context: NSManagedObjectContext = appDel.managedObjectContext!
+            
+            //Ein neues ToDo anlegen für die Entity "toDo" in CoreData
+            let newToDo = NSEntityDescription.insertNewObjectForEntityForName("toDo", inManagedObjectContext: context)
+            newToDo.setValue(toDoTextField, forKey: "toDoName")
+            newToDo.setValue(beschreibungTextField, forKey: "toDoDescription")
+            newToDo.setValue(datumTextField, forKey: "toDoDate")
+            
+            //das toDo der Entity hinzufügen
+            context.save()
+            
+            // Nach Klicken des Save Buttons wird ein Segue ausgeführt zurück zur TableView.
+            // Manueller Segue.
+            performSegueWithIdentifier("SaveButton", sender: self)
+            
+            
         
         
         
