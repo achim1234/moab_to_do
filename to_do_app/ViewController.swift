@@ -7,19 +7,61 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UITableViewController {
     
     @IBOutlet var tableViewOutlet: UITableView!
     
-    var toDos = ["Basketball spielen", "Aufstehen", "Fotografieren"]
-
+    
+    let context = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext;
+    var daten = [ToDo]();
+    
+    override func viewDidAppear(animated: Bool) {
+        loadData();
+        println("view Did appear");
+    }
+    
+    
+    func loadData(){
+        
+        //var appDel:AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate);
+        //var context:NSManagedObjectContext! = appDel.managedObjectContext;
+        
+        
+        var request = NSFetchRequest(entityName: "ToDos");
+        //request.returnsObjectsAsFaults = false;
+        
+        daten = context!.executeFetchRequest(request, error: nil) as! [ToDo];
+        
+        tableView.reloadData();
+        if daten.count > 0 {
+            //var res = daten[0] as! NSManagedObject;
+            
+            println("es wurden daten geladen, ausgabe beim laden:");
+            println(daten.count);
+            
+        }else{
+            println("keine Daten");
+        }
+        println(" load data aufgerufen")
+        tableView.reloadData();
+        println("load data 2 aufgerufen")
+        
+        
+    }
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        tableView.reloadData();
+        // Uncomment the following line to preserve selection between presentations
+        // self.clearsSelectionOnViewWillAppear = false
         
-        // Zelle innerhalb der TableView bei der TableView selbst registrieren
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "toDoCell")
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        println("view did load aufgerufen")
     }
     
     override func didReceiveMemoryWarning() {
@@ -27,74 +69,73 @@ class ViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return toDos.count
-    }
+    // MARK: - Table view data source
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        // #warning Potentially incomplete method implementation.
+        // Return the number of sections.
         return 1
     }
     
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete method implementation.
+        // Return the number of rows in the section.
+        return daten.count;
+    }
+    
+    
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // Vorab registrierte Klasse holen
-        let cell = tableViewOutlet.dequeueReusableCellWithIdentifier("toDoCell") as! UITableViewCell
-        // Array-Eintrag jeweils in Cell speichern
-        cell.textLabel?.text = toDos[indexPath.row]
+       println()
+        println("vor celll")
+        println()
         
-        return cell
-    }
-    
-    // Reagiert wenn eine Zelle angewählt wurde.
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        //print("Selected cell at indexPath.row = \(indexPath.row).")
+        let cell = tableView.dequeueReusableCellWithIdentifier("toDoCell", forIndexPath: indexPath) as! UITableViewCell //crash!!!!!!!!!
         
-        // Idee: performSegueWithIdentifier (manueller Segue mit indexPath.row).
-       
-        performSegueWithIdentifier("showDetailsSegue", sender: self)
+     //   cell.textLabel?.text = "\(daten[indexPath.row].toDo)";
+        println()
+        println("nach celll")
+        println()
+        return cell;
     }
     
-    // Diese Funktion setzt die entsprechende Zelle/Reihe auf editierbar.
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
     
-    // Mit dieser Funktion kann man auf die Delete/Edit-Anweisungen reagieren.
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            print("Deleting cell at indexPath.row = \(indexPath.row).")
-            
-      //      let nameOfDeletedToDo = dataFromCoreDataWithIndexPathAsKey["\(indexPath.row)"]!["toDoName"]!
-      //      deleteEntryInDatabase(nameOfDeletedToDo)
-            //fetchDatabase()
-            self.tableViewOutlet.reloadData()
-            
-            // Versuch Daten aus CoreData wieder zu löschen.
-            /* http://www.learncoredata.com/create-retrieve-update-delete-data-with-core-data/
-            // 2
-            let appDelegateOnDelete = UIApplication.sharedApplication().delegate as! AppDelegate
-            let managedObjContext = appDelegateOnDelete.managedObjectContext
-            
-            // 3
-            managedObjContext.deleteObject(dataFromCoreData[indexPath.row])
-            appDelegateOnDelete.saveContext()
-            
-            // 4
-            dataFromCoreData.removeAtIndex(indexPath.row)
-            tableView.reloadData()
-            */
-        }
-    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showDetailsSegue" {
-   //         let destinationControllerShowDetails = segue.destinationViewController as! ShowDetailsViewController
-     //       destinationControllerShowDetails.indexPathHandedOver = dictKeyIdentifier
-       //     destinationControllerShowDetails.dataFromCoreDataHandedOver = dataFromCoreDataWithIndexPathAsKey
-        }
+        
+        //if(segue.identifier == "segue_show_todo"){
+          //  (segue.destinationViewController as! ShowToDo).todo_item = daten[tableView.indexPathForCell(sender as! UITableViewCell)!.row];
+        //}
     }
     
     
     
+    
+    // Override to support conditional editing of the table view.
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        // Return NO if you do not want the specified item to be editable.
+        return true;
+    }
+    
+    
+    
+    // Override to support editing the table view.
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Delete {
+            // Delete the row from the data source
+            context!.deleteObject(daten[indexPath.row]);
+            context!.save(nil);
+            let fetchRequest = NSFetchRequest(entityName: "ToDos");
+            daten = context!.executeFetchRequest(fetchRequest, error: nil) as! [ToDo];
+            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            
+        }
+    }
+    
 
+    
+    
+    
+    
 }
 

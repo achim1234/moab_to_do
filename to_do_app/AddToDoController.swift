@@ -67,42 +67,4 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
            
         }
     }
-    
-    
-    // Implementierte Funktion von UITextFieldDelegate.
-    // Reagiert auf gedrückten Return-Button innerhalb der beiden Textfelder.
-    // Wichtig: Outlets müssen vorher beim ViewController als OutletDelegate registriert werden!
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
-        switch textField {
-        case toDoOutlet:
-        //    toDoTextField = toDoOutlet.text!
-            beschreibungOutlet.becomeFirstResponder()
-        case beschreibungOutlet:
-       //     beschreibungTextField = beschreibungOutlet.text!
-            datumOutlet.becomeFirstResponder()
-        case datumOutlet:
-       //     datumTextField = datumOutlet.text!
-            datumOutlet.resignFirstResponder()
-        default:
-            print("Wrong case in func textFieldShouldReturn AddToDoViewController.")
-        }
-        
-        return true
-    }
-    
-    // Funktion handelt die Datenübertragung via Segue.
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "savedToDoSegue" {
-            /*let destinationController = segue.destinationViewController as! ViewController
-            destinationController.toDoName = toDoTextField
-            destinationController.toDoDescription = beschreibungTextField
-            destinationController.toDoEstimatedTime = datumTextField*/
-            
-        } else if segue.identifier == "SaveButton" {
-            print("Segue.identifier: \(segue.identifier).")
-        }
-    }
-    
-    
-    
 }

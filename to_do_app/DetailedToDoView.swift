@@ -24,17 +24,41 @@ class DetailedToDoView: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        showToDoOutlet.text = "\(todo_item!.toDo)";
-        showBeschreibungOutlet.text = "\(todo_item!.beschreibung)";
-        showDatumOutlet.text = "\(todo_item!.datum)";
         
-     
+        
+        if(todo_item == nil){
+        
+            println("es wurde nichts in der db gespeichert")
+        
+        }
+        else{
+        
+            showToDoOutlet.text = "\(todo_item!.toDo)"
+            showBeschreibungOutlet.text = "\(todo_item!.beschreibung)"
+            showDatumOutlet.text = "\(todo_item!.datum)"
+    
+        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+  
+    /*
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if(segue.identifier == )
+    
+    }
+    */
+    
+    
+    
+    
+    
+    
+    
     
     
     
