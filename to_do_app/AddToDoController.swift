@@ -64,7 +64,7 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
             toDoOutlet.text = ""
             beschreibungOutlet.text = ""
             datumOutlet.text = ""
-           
+          // self.navigationController?.popToRootViewControllerAnimated(<#animated: Bool#>)
         }
     }
 }
