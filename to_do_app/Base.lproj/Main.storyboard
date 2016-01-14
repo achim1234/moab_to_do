@@ -204,7 +204,7 @@
                                 </variation>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qfh-jz-Yzk">
-                                <rect key="frame" x="243" y="385" width="70" height="30"/>
+                                <rect key="frame" x="243" y="386" width="70" height="30"/>
                                 <state key="normal" title="Speichern">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
