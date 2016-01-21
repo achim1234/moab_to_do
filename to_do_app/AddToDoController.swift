@@ -15,6 +15,10 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var beschreibungOutlet: UITextField!
     @IBOutlet weak var datumOutlet: UITextField!
     
+    var toDoName = ""
+    var beschreibungName = ""
+    var datumName = ""
+    
 
     
     override func viewDidLoad() {
@@ -53,10 +57,11 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
             
             var todo_item = NSEntityDescription.insertNewObjectForEntityForName("ToDos", inManagedObjectContext: context) as! NSManagedObject;
             
+            println(toDoOutlet.text!)
             
-            todo_item.setValue("" + "\(toDoOutlet.text)", forKey: "toDo");
-            todo_item.setValue("" + "\(beschreibungOutlet.text)", forKey: "beschreibung");
-            todo_item.setValue("" + "\(datumOutlet.text)", forKey: "datum");
+            todo_item.setValue("\(toDoOutlet.text!)", forKey: "toDo");
+            todo_item.setValue("\(beschreibungOutlet.text!)", forKey: "beschreibung");
+            todo_item.setValue("\(datumOutlet.text!)", forKey: "datum");
             
             
             context.save(nil)
@@ -66,5 +71,39 @@ class AddToDoController: UIViewController, UITextFieldDelegate {
             datumOutlet.text = ""
           // self.navigationController?.popToRootViewControllerAnimated(<#animated: Bool#>)
         }
+    }
+    
+    // Implementierte Funktion von UITextFieldDelegate.
+    // Reagiert auf gedrückten Return-Button innerhalb der beiden Textfelder.
+    // Wichtig: Outlets müssen vorher beim ViewController als OutletDelegate registriert werden!
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        println("textFieldShouldReturn aufgerufen!")
+        switch textField {
+        case toDoOutlet:
+            toDoName = toDoOutlet.text!
+            beschreibungOutlet.becomeFirstResponder()
+        case beschreibungOutlet:
+            beschreibungName = beschreibungOutlet.text!
+            datumOutlet.becomeFirstResponder()
+        case datumOutlet:
+            datumName = datumOutlet.text!
+            datumOutlet.resignFirstResponder()
+        default:
+            print("Wrong case in func textFieldShouldReturn AddToDoController.")
+        }
+        
+        return true
+    }
+    
+    // Funktion handelt die Datenübertragung via Segue.
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+      /*  if segue.identifier == "savedToDoSegue" {
+            let destinationController = segue.destinationViewController as! ChooseDateViewController
+            destinationController.toDoName = toDoNameAsString
+            destinationController.toDoDescription = toDoDescriptionAsString
+            destinationController.toDoEstimatedTime = toDoEstimatedTimeAsString
+        } else if segue.identifier == "SaveButton" {
+            print("Segue.identifier: \(segue.identifier).")
+        }*/
     }
 }

@@ -17,8 +17,10 @@ class ViewController: UITableViewController {
     let context = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext;
     var daten = [ToDo]();
     
+    var toDoTitlesFromCoreData = [String]()
+    
     override func viewDidAppear(animated: Bool) {
-        loadData();
+        //loadData();
         println("view Did appear");
     }
     
@@ -28,11 +30,12 @@ class ViewController: UITableViewController {
         //var appDel:AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate);
         //var context:NSManagedObjectContext! = appDel.managedObjectContext;
         
-        
+        /*
         var request = NSFetchRequest(entityName: "ToDos");
         //request.returnsObjectsAsFaults = false;
         
         daten = context!.executeFetchRequest(request, error: nil) as! [ToDo];
+        println(daten[0].beschreibung)
         
         tableView.reloadData();
         if daten.count > 0 {
@@ -47,7 +50,31 @@ class ViewController: UITableViewController {
         println(" load data aufgerufen")
         tableView.reloadData();
         println("load data 2 aufgerufen")
+        */
         
+        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context: NSManagedObjectContext = appDel.managedObjectContext!
+        
+       
+        let request = NSFetchRequest(entityName: "ToDos")
+        var results = context.executeFetchRequest(request, error: nil)
+        //println(results?.count)
+        if results!.count > 0 {
+            for item in results as! [NSManagedObject] {
+                let name: AnyObject? = item.valueForKey("toDo")
+                let descr: AnyObject? = item.valueForKey("beschreibung")
+                let doDate: AnyObject? = item.valueForKey("datum")
+                
+                var nameAsString:String = name as! String
+                //var descrAsString:String = descr as! String
+                //var dateAsString:String = doDate as! String
+             
+                
+                toDoTitlesFromCoreData += [nameAsString]
+            }
+            println("Anzahl ToDos")
+            println(toDoTitlesFromCoreData.count)
+        }
         
     }
     
@@ -55,6 +82,7 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadData();
         tableView.reloadData();
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -80,22 +108,22 @@ class ViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return daten.count;
+        return toDoTitlesFromCoreData.count;
+        // return daten.count;
     }
     
     
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-       println()
-        println("vor celll")
-        println()
+       
         
         let cell = tableView.dequeueReusableCellWithIdentifier("toDoCell", forIndexPath: indexPath) as! UITableViewCell //crash!!!!!!!!!
         
-     //   cell.textLabel?.text = "\(daten[indexPath.row].toDo)";
-        println()
-        println("nach celll")
-        println()
+        cell.textLabel?.text = "\(toDoTitlesFromCoreData[indexPath.row])";
+        
+        println("toDoTitles in TableView")
+        println("\(toDoTitlesFromCoreData[indexPath.row])")
+        
         return cell;
     }
     
@@ -107,6 +135,8 @@ class ViewController: UITableViewController {
           //  (segue.destinationViewController as! ShowToDo).todo_item = daten[tableView.indexPathForCell(sender as! UITableViewCell)!.row];
         //}
     }
+    
+    
     
     
     
