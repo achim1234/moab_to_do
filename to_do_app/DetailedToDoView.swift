@@ -17,6 +17,9 @@ class DetailedToDoView: UIViewController {
     
     var todo_item: ToDo? //name der Swift-Datei ToDo.swift
     
+    var coreDataIdentifier: Int = Int.init()
+    var coreDataHandedOver = [String: [String: String]]()
+    
     
     
     
@@ -25,7 +28,15 @@ class DetailedToDoView: UIViewController {
         super.viewDidLoad()
         
         
+        let chosenToDo = coreDataHandedOver["\(coreDataIdentifier)"]!
+        //var toDoValues = chosenToDo?.values
+       
         
+        showToDoOutlet.text = chosenToDo["toDoName"]
+        showBeschreibungOutlet.text = chosenToDo["toDoDescr"]
+        showDatumOutlet.text = chosenToDo["toDoDate"]
+        
+        /*
         if(todo_item == nil){
         
             println("es wurde nichts in der db gespeichert")
@@ -38,6 +49,7 @@ class DetailedToDoView: UIViewController {
             showDatumOutlet.text = "\(todo_item!.datum)"
     
         }
+        */
     }
     
     override func didReceiveMemoryWarning() {

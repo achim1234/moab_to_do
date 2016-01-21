@@ -15,13 +15,16 @@ class ViewController: UITableViewController {
     
     
     let context = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext;
-    var daten = [ToDo]();
     
-    var toDoTitlesFromCoreData = [String]()
+    var daten = [String: [String: String]]();
+    var datenMitIndexPathAlsKey = [String: [String: String]]();
+    
+    var dictKeyIdentifier: Int = Int.init()
+    
     
     override func viewDidAppear(animated: Bool) {
         //loadData();
-        println("view Did appear");
+        //println("view Did appear");
     }
     
     
@@ -66,14 +69,13 @@ class ViewController: UITableViewController {
                 let doDate: AnyObject? = item.valueForKey("datum")
                 
                 var nameAsString:String = name as! String
-                //var descrAsString:String = descr as! String
-                //var dateAsString:String = doDate as! String
+                var descrAsString:String = descr as! String
+                var dateAsString:String = doDate as! String
              
-                
-                toDoTitlesFromCoreData += [nameAsString]
+                daten[nameAsString] = ["toDoName": nameAsString,
+                    "toDoDescr": descrAsString,
+                    "toDoDate": dateAsString]
             }
-            println("Anzahl ToDos")
-            println(toDoTitlesFromCoreData.count)
         }
         
     }
@@ -108,8 +110,7 @@ class ViewController: UITableViewController {
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete method implementation.
         // Return the number of rows in the section.
-        return toDoTitlesFromCoreData.count;
-        // return daten.count;
+        return daten.count
     }
     
     
@@ -119,10 +120,14 @@ class ViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("toDoCell", forIndexPath: indexPath) as! UITableViewCell //crash!!!!!!!!!
         
-        cell.textLabel?.text = "\(toDoTitlesFromCoreData[indexPath.row])";
+        let key = Array(self.daten.keys)[indexPath.row]
+        let value = Array(self.daten.values)[indexPath.row]
         
-        println("toDoTitles in TableView")
-        println("\(toDoTitlesFromCoreData[indexPath.row])")
+        let indexPathAsString = String(indexPath.row)
+        datenMitIndexPathAlsKey[indexPathAsString] = value
+        
+        cell.textLabel?.text = key
+        
         
         return cell;
     }
@@ -131,11 +136,14 @@ class ViewController: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        //if(segue.identifier == "segue_show_todo"){
-          //  (segue.destinationViewController as! ShowToDo).todo_item = daten[tableView.indexPathForCell(sender as! UITableViewCell)!.row];
-        //}
+        if(segue.identifier == "showDetailsSegue"){
+            let destinationController = segue.destinationViewController as! DetailedToDoView
+            destinationController.coreDataIdentifier = dictKeyIdentifier
+            destinationController.coreDataHandedOver = datenMitIndexPathAlsKey
+            println("prepareForSegue")
+        }
     }
-    
+
     
     
     
@@ -147,16 +155,33 @@ class ViewController: UITableViewController {
         return true;
     }
     
+    // Reagiert wenn eine Zelle angewählt wurde.
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        println("Selected cell at indexPath.row = \(indexPath.row).")
+        
+        // Idee: performSegueWithIdentifier (manueller Segue mit indexPath.row).
+        println("Identifier is being changed")
+        dictKeyIdentifier = indexPath.row
+        println("performSegueWithIdentifier")
+        performSegueWithIdentifier("showDetailsSegue", sender: self)
+    }
+    
+    override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
+        println("should perform segue")
+        return false;
+    }
+    
     
     
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            context!.deleteObject(daten[indexPath.row]);
+            //context!.deleteObject(daten[indexPath.row]);
             context!.save(nil);
             let fetchRequest = NSFetchRequest(entityName: "ToDos");
-            daten = context!.executeFetchRequest(fetchRequest, error: nil) as! [ToDo];
+            //daten = context!.executeFetchRequest(fetchRequest, error: nil) as! [ToDo];
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
             
         }
