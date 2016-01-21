@@ -21,6 +21,8 @@ class ViewController: UITableViewController {
     
     var dictKeyIdentifier: Int = Int.init()
     
+    var segueActive: Bool = false
+    
     
     override func viewDidAppear(animated: Bool) {
         //loadData();
@@ -169,7 +171,13 @@ class ViewController: UITableViewController {
     
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool {
         println("should perform segue")
-        return false;
+        segueActive = true
+        
+        if identifier == "showDetailsSegue" {
+            segueActive = false
+        }
+        
+        return segueActive
     }
     
     
@@ -177,20 +185,71 @@ class ViewController: UITableViewController {
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+            
+            
+            let nameOfDeltedToDo = datenMitIndexPathAlsKey["\(indexPath.row)"]!["toDoName"]
+            if (deleteEntryInDatabase(nameOfDeltedToDo!)) {
+                tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            }
+            
+            self.tableView.reloadData()
+            
+            /*
             // Delete the row from the data source
             //context!.deleteObject(daten[indexPath.row]);
             context!.save(nil);
             let fetchRequest = NSFetchRequest(entityName: "ToDos");
             //daten = context!.executeFetchRequest(fetchRequest, error: nil) as! [ToDo];
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            */
             
         }
     }
     
-
+    func deleteEntryInDatabase(toDoNameToDelete: String) -> Bool {
+        var flag = false;
+        // Zugriff auf CoreData.
+        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        // ManagedObjectContext verwaltet sämtliche Datenobjekte.
+        let context: NSManagedObjectContext = appDel.managedObjectContext!
+        
+        // Daten aus CoreData abfragen.
+       
+        // Request an die Entity "ToDos".
+        let request = NSFetchRequest(entityName: "ToDos")
+        // Rückgabewerte des Requests.
+        let results = context.executeFetchRequest(request, error: nil)
+        
+        if results!.count > 0 {
+            for item in results as! [NSManagedObject] {
+                let name: AnyObject? = item.valueForKey("toDo")
+                let descr: AnyObject? = item.valueForKey("beschreibung")
+                let doDate: AnyObject? = item.valueForKey("datum")
+                
+                var nameAsString:String = name as! String
+                var descrAsString:String = descr as! String
+                var dateAsString:String = doDate as! String
+                
+                daten[nameAsString] = ["toDoName": nameAsString,
+                    "toDoDescr": descrAsString,
+                    "toDoDate": dateAsString]
+        
+        // Vergleich der aktuellen toDo mit zu löschender toDo
+                if daten[nameAsString]!["toDoName"]! == toDoNameToDelete {
+                    daten.removeValueForKey(toDoNameToDelete)
+                    context.deleteObject(item)
+                        if item.deleted {
+                            print("ToDo \"\(toDoNameToDelete)\" successfully deleted.")
+                            context.save(nil)
+                            flag = true
+                        }
     
-    
-    
+                }
+            
+            }
+        }
+        return flag
+    }
     
 }
 
