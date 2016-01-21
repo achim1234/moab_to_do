@@ -175,6 +175,7 @@ class ViewController: UITableViewController {
         
         if identifier == "showDetailsSegue" {
             segueActive = false
+            
         }
         
         return segueActive
